@@ -35,7 +35,7 @@ CREATE TABLE school_locations (
 
 
 -- import the CSV to the table school_locations
- COPY school_locations FROM 'school-locations.csv' CSV HEADER DELIMITER ','
+ COPY school_locations FROM 'school-locations_download.csv' CSV HEADER DELIMITER ','
 
 -- Add primary key
 alter table school_locations add fid serial PRIMARY KEY
