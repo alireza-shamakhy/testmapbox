@@ -1,6 +1,6 @@
 -- create database
 sudo -u postgres -i
-createuser -S -D -R -P whatif # create and note down a password for database access
+createuser -S -D -R -P whatif # create and note down a password for database access -- whatif is a sample user name.
 createdb -O whatif landcheckerdb
 psql landcheckerdb
 
@@ -35,7 +35,7 @@ CREATE TABLE school_locations (
 
 
 -- import the CSV to the table school_locations
- COPY school_locations FROM '/tmp/school-locations.csv' CSV HEADER DELIMITER ','
+ COPY school_locations FROM 'school-locations.csv' CSV HEADER DELIMITER ','
 
 -- Add primary key
 alter table school_locations add fid serial PRIMARY KEY
@@ -52,7 +52,7 @@ CREATE INDEX index_the_geom ON school_locations USING gist(the_geom);
 
 
 -- convert table school_locations to GeoJSON using ogr2ogr
-ogr2ogr -t_srs EPSG:4326 -f "GeoJSON" /home/ali/Documents/resume-ubuntu/alex-hill/schools.json PG:"host=localhost dbname=landcheckerdb user=whatif password=123456 port=5432" "school_locations(the_geom)"
+ogr2ogr -t_srs EPSG:4326 -f "GeoJSON" schools.json PG:"host=localhost dbname=landcheckerdb user=whatif password=123456 port=5432" "school_locations(the_geom)"
 
 -- tippecanoe  -- schools.mbtiles
 tippecanoe -o schools.mbtiles schools.json -s EPSG:4326
@@ -66,7 +66,7 @@ shp2pgsql -s 4326 -c -D -I LGA_2016_AUST lga| \
 delete from lga where ste_name16 != 'Victoria'
 
 -- convert table lga to GeoJSON using ogr2ogr
-ogr2ogr -t_srs EPSG:4326 -f "GeoJSON" /home/ali/Documents/resume-ubuntu/alex-hill/localities.json PG:"host=localhost dbname=landcheckerdb user=whatif password=123456 port=5432" "lga(geom)"
+ogr2ogr -t_srs EPSG:4326 -f "GeoJSON" localities.json PG:"host=localhost dbname=landcheckerdb user=whatif password=123456 port=5432" "lga(geom)"
 
 -- tippecanoe  -- localities.mbtiles
 tippecanoe -o localities.mbtiles localities.json -s EPSG:4326
